@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include "provision.h"
 #include "i2c_utils.h"
+#include "utils.h"
 #include "mailbox_enums.h"
 #include "arguments.h"
 
@@ -184,7 +185,7 @@ int waitUntilUfmCmdTriggerExec(ARGUMENTS args)
 	int i = 0;
 
 	while (i < 100) {
-		read_reg_value = i2cReadByteData(args, MB_UFM_CMD_TRIGGER);
+		read_reg_value = ReadByteData(args, MB_UFM_CMD_TRIGGER);
 		if (read_reg_value & mask) {
 			if (args.debug_flag)
 				printf("UFM Command Trigger: Not execute, wait 20ms %d time\n", i);
@@ -204,7 +205,7 @@ int waitUntilUfmProvStatusCmdDone(ARGUMENTS args)
 	int i = 0;
 
 	while (i < 100) {
-		read_reg_value = i2cReadByteData(args, MB_PROVISION_STATUS);
+		read_reg_value = ReadByteData(args, MB_PROVISION_STATUS);
 		if (read_reg_value & MB_UFM_PROV_CMD_BUSY_MASK) {
 			if (args.debug_flag)
 				printf("UFM Provisioning Status: Command busy..., wait 20ms %d time\n", i);
@@ -231,17 +232,17 @@ int writeUfmProvFifoCmd(ARGUMENTS args, MB_UFM_PROV_CMD_ENUM cmd, uint8_t *buf, 
 	int i;
 
 	// Flush Write FIFO
-	i2cWriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_FLUSH_WR_FIFO_MASK);
+	WriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_FLUSH_WR_FIFO_MASK);
 	if (waitUntilUfmCmdTriggerExec(args) || waitUntilUfmProvStatusCmdDone(args))
 		return 1;
 
 	// Write FIFO
 	for (i = 0; i < len; i++)
-		i2cWriteByteData(args, MB_UFM_WRITE_FIFO, buf[i]);
+		WriteByteData(args, MB_UFM_WRITE_FIFO, buf[i]);
 
 	// Trigger command
-	i2cWriteByteData(args, MB_PROVISION_CMD, cmd);
-	i2cWriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_EXECUTE_MASK);
+	WriteByteData(args, MB_PROVISION_CMD, cmd);
+	WriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_EXECUTE_MASK);
 	if (waitUntilUfmCmdTriggerExec(args) || waitUntilUfmProvStatusCmdDone(args))
 		return 1;
 
@@ -253,19 +254,19 @@ int readUfmProvFifoCmd(ARGUMENTS args, MB_UFM_PROV_CMD_ENUM cmd, uint8_t *buf, i
 	int i;
 
 	// Flush Read FIFO
-	i2cWriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_FLUSH_RD_FIFO_MASK);
+	WriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_FLUSH_RD_FIFO_MASK);
 	if (waitUntilUfmCmdTriggerExec(args) || waitUntilUfmProvStatusCmdDone(args))
 		return 1;
 
 	// Trigger command
-	i2cWriteByteData(args, MB_PROVISION_CMD, cmd);
-	i2cWriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_EXECUTE_MASK);
+	WriteByteData(args, MB_PROVISION_CMD, cmd);
+	WriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_EXECUTE_MASK);
 	if (waitUntilUfmCmdTriggerExec(args) || waitUntilUfmProvStatusCmdDone(args))
 		return 1;
 
 	// Read FIFO
 	for (i = 0; i < len; i++)
-		buf[i] = i2cReadByteData(args, MB_UFM_READ_FIFO);
+		buf[i] = ReadByteData(args, MB_UFM_READ_FIFO);
 
 	return 0;
 }
@@ -306,8 +307,8 @@ int writeUfmProvBmcPchRegionOffset(ARGUMENTS args)
 
 int provisionLock(ARGUMENTS args)
 {
-	i2cWriteByteData(args, MB_PROVISION_CMD, MB_UFM_PROV_END);
-	i2cWriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_EXECUTE_MASK);
+	WriteByteData(args, MB_PROVISION_CMD, MB_UFM_PROV_END);
+	WriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_EXECUTE_MASK);
 	if (waitUntilUfmCmdTriggerExec(args) || waitUntilUfmProvStatusCmdDone(args)) {
 		printf("%s failed\n", __func__);
 		return 1;
@@ -416,8 +417,8 @@ int provision(ARGUMENTS args)
 
 int unprovision(ARGUMENTS args)
 {
-	i2cWriteByteData(args, MB_PROVISION_CMD, MB_UFM_PROV_ERASE);
-	i2cWriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_EXECUTE_MASK);
+	WriteByteData(args, MB_PROVISION_CMD, MB_UFM_PROV_ERASE);
+	WriteByteData(args, MB_UFM_CMD_TRIGGER, MB_UFM_CMD_EXECUTE_MASK);
 	if (waitUntilUfmCmdTriggerExec(args) || waitUntilUfmProvStatusCmdDone(args)) {
 		printf("%s failed\n", __func__);
 		return 1;

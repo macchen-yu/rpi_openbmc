@@ -1,5 +1,5 @@
 project('aspeed-pfr-tool', 'c', 'cpp',
-        version : '1.0',
+        version : '2.0',
         meson_version: '>=0.57.0',
         default_options: [
             'werror=true',
@@ -20,6 +20,8 @@ incdir = include_directories(
 feature_map = {
     'mctp' : '-DENABLE_PFR_MCTP',
     'attestation' : '-DENABLE_PFR_SPDM_ATTESTATION',
+    'secure_connection' : '-DSUPPORT_SECURE_CONNECTION',
+    'secure_test_case' : '-DSECURE_TEST_CASE',
 }
 
 # Get the options status and build a project summary to show which flags are
@@ -31,6 +33,11 @@ foreach option_key, option_value : feature_map
     endif
 endforeach
 
+if (get_option('secure_connection').enabled())
+    spdm = meson.get_compiler('c').find_library('spdm')
+    aspeed_pfr_tool_dependencies += [spdm]
+endif
+
 # Generate the aspeed-pfr-tool executable
 executable(
     'aspeed-pfr-tool',
@@ -41,6 +48,7 @@ executable(
       'status.c',
       'info.c',
       'spdm.c',
+      'utils.c',
       'main.c'
     ],
     include_directories : incdir,

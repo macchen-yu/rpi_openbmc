@@ -68,3 +68,17 @@ option(
     description: 'Enable the PFR SPDM ATTESTATION'
 )
 
+option(
+    'secure_connection',
+    type : 'feature',
+    value : 'disabled',
+    description: 'test case for secure connection'
+)
+
+option(
+    'secure_test_case',
+    type : 'feature',
+    value : 'disabled',
+    description: 'test case for secure connection'
+)
+

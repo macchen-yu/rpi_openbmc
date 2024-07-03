@@ -25,5 +25,8 @@ typedef struct _ARGUMENTS {
 	char *pfr_tool_conf;
 	char *provision_cmd;
 	char *checkpoint_cmd;
+	int secure_mode;
+	uint8_t mctp_dst;
+	uint8_t mctp_network;
 } ARGUMENTS;
 
