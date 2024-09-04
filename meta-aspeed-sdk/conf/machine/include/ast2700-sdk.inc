@@ -53,6 +53,9 @@ UBOOT_FIT_TEE_IMAGE ?= "${DEPLOY_DIR_IMAGE}/optee/tee-raw.bin"
 UBOOT_FIT_SSP_IMAGE ?= "${DEPLOY_DIR_IMAGE}/ast2700-ssp.bin"
 UBOOT_FIT_TSP_IMAGE ?= "${DEPLOY_DIR_IMAGE}/ast2700-tsp.bin"
 
+# zephyr pre-built toolchain
+ZEPHYR_TOOLCHAIN_VARIANT = "zephyr"
+
 # bootmcu
 PREFERRED_PROVIDER_virtual/bootmcu ?= "bootmcu-spl"
 
