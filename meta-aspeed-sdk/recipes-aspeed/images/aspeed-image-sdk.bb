@@ -4,7 +4,7 @@ LICENSE = "MIT"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit deploy
-inherit ${@bb.utils.contains('MACHINE_FEATURES', 'ast-mmc', 'image', '', d)}
+inherit ${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'image', '', d)}
 
 UBOOT_SUFFIX ?= "bin"
 
@@ -33,10 +33,10 @@ ASPEED_IMAGE_SIZE_KB:aspeed-g5 ?= "24576"
 
 ASPEED_IMAGE_KERNEL_IMAGE ?= "fitImage-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
 ASPEED_IMAGE_NAME ?= "all.bin"
-ASPEED_BOOT_EMMC ?= "${@bb.utils.contains('MACHINE_FEATURES', 'ast-mmc', 'yes', 'no', d)}"
+ASPEED_BOOT_EMMC_UFS ?= "${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'yes', 'no', d)}"
 
-IMAGE_FSTYPES:ast-mmc += "wic.xz mmc-ext4-tar"
-IMAGE_FEATURES:ast-mmc += "read-only-rootfs-delayed-postinsts"
+IMAGE_FSTYPES += "${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'wic.xz mmc-ext4-tar', 'no', d)}"
+IMAGE_FEATURES += "${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'read-only-rootfs-delayed-postinsts', 'no', d)}"
 
 do_mk_empty_image() {
     # Assemble the flash image
@@ -47,8 +47,8 @@ do_mk_empty_image() {
 python do_deploy() {
     import subprocess
 
-    if d.getVar('ASPEED_BOOT_EMMC', True) == "yes":
-        bb.fatal("MMC mode should not run this task")
+    if d.getVar('ASPEED_BOOT_EMMC_UFS', True) == "yes":
+        bb.fatal("MMC UFS mode should not run this task")
 
     initramfs_image = d.getVar('INITRAMFS_IMAGE', True)
     if initramfs_image != "aspeed-image-initramfs":
@@ -126,6 +126,14 @@ python do_deploy:ast-mmc() {
          bb.fatal('Not support ' + str(initramfs_image) + ' INITRAMFS_IMAGE')
 
     bb.debug(1, "MMC mode do nothing")
+}
+
+python do_deploy:ast-ufs() {
+    initramfs_image = d.getVar('INITRAMFS_IMAGE', True)
+    if initramfs_image != "aspeed-image-initramfs":
+         bb.fatal('Not support ' + str(initramfs_image) + ' INITRAMFS_IMAGE')
+
+    bb.debug(1, "UFS mode do nothing")
 }
 
 do_deploy[depends] = " \
