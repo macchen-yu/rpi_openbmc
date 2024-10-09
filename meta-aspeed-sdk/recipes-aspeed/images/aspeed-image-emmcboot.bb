@@ -88,9 +88,10 @@ python do_deploy() {
     soc_family = d.getVar('SOC_FAMILY', True)
 
     if soc_family == "aspeed-g7":
-        if not bmcu_fw_binary:
-            bb.fatal("Boot from EMMC only support BootMCU SPL")
-        bb.build.exec_func("do_mk_emmc_boot_image_g7", d)
+        bb.fatal("AST2700 Boot from EMMC mode should not run this task")
+        #if not bmcu_fw_binary:
+        #    bb.fatal("Boot from EMMC only support BootMCU SPL")
+        #bb.build.exec_func("do_mk_emmc_boot_image_g7", d)
     elif soc_family == "aspeed-g6":
         if not spl_binary:
             bb.fatal("Boot from EMMC only support SPL")

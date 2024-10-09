@@ -4,6 +4,12 @@
 UBOOT_BINARY := "u-boot.${UBOOT_SUFFIX}"
 UBOOT_SUFFIX:append = ".merged"
 
+# Install the image-u-boot to deploy folder when building the emmc image.
+do_generate_ext4_tar:append() {
+    cd ${S}/ext4
+    install -m 644 image-u-boot ${IMGDEPLOYDIR}/image-u-boot
+}
+
 # Merge bootmcu and u-boot image
 do_merge_uboot() {
     mk_empty_image_zeros ${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX} ${FLASH_BMCU_SIZE}
