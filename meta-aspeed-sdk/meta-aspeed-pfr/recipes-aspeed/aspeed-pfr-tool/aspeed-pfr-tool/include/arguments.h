@@ -18,6 +18,7 @@ typedef struct _ARGUMENTS {
 	uint32_t pch_active_pfm_offset;
 	uint32_t pch_staging_offset;
 	uint32_t pch_recovery_offset;
+	uint32_t afm_staging_offset;
 	uint8_t tx_msg[64];
 	uint8_t rx_msg[64];
 	int tx_msg_len;

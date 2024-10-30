@@ -115,6 +115,7 @@ void printArguments(ARGUMENTS args)
 	printf("PCH_ACTIVE_PFM_OFFSET = 0x%08x\n", args.pch_active_pfm_offset);
 	printf("PCH_STAGING_OFFSET = 0x%08x\n", args.pch_staging_offset);
 	printf("PCH_RECOVERY_OFFSET = 0x%08x\n", args.pch_recovery_offset);
+	printf("AFM_STAGING_OFFSET = 0x%08x\n", args.afm_staging_offset);
 	printf("Tx Msg\n");
 	printRawData(args.tx_msg, args.tx_msg_len);
 }
@@ -149,6 +150,9 @@ void parseConfigElements(ARGUMENTS *args)
 			args->pch_staging_offset = strtoul(&line[strlen("PCH_STAGING_OFFSET") + 1], 0, 0);
 		else if (strncmp(line, "PCH_RECOVERY_OFFSET", strlen("PCH_RECOVERY_OFFSET")) == 0)
 			args->pch_recovery_offset = strtoul(&line[strlen("PCH_RECOVERY_OFFSET") + 1], 0, 0);
+		else if (strncmp(line, "AFM_STAGING_OFFSET", strlen("AFM_STAGING_OFFSET")) == 0)
+			args->afm_staging_offset = strtoul(&line[strlen("AFM_STAGING_OFFSET") + 1], 0, 0);
+
 	}
 }
 
@@ -289,8 +293,7 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "Secure connection isn't supported in this mode\n");
 			args.i2c_fd = i2cOpenDev(args.i2c_bus, args.rot_addr);
 			args.secure_mode = 0;
-		}
-		else {
+		} else {
 			if (args.mctp_dst == 0)
 				args.mctp_dst = DEFAULT_MCTP_DST_SKT;
 

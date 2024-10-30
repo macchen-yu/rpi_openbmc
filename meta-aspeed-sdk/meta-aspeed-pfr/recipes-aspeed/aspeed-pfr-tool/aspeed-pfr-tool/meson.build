@@ -1,5 +1,5 @@
 project('aspeed-pfr-tool', 'c', 'cpp',
-        version : '2.0',
+        version : '2.1',
         meson_version: '>=0.57.0',
         default_options: [
             'werror=true',
@@ -67,6 +67,7 @@ conf_data.set('BMC_RECOVERY_OFFSET', get_option('bmc_recovery_offset'))
 conf_data.set('PCH_ACTIVE_PFM_OFFSET', get_option('pch_active_pfm_offset'))
 conf_data.set('PCH_STAGING_OFFSET', get_option('pch_staging_offset'))
 conf_data.set('PCH_RECOVERY_OFFSET', get_option('pch_recovery_offset'))
+conf_data.set('AFM_STAGING_OFFSET', get_option('afm_staging_offset'))
 
 summary('I2C_BUS',get_option('i2c_bus'), section : 'PFR Info')
 summary('ROT_ADDRESS',get_option('rot_address'), section : 'PFR Info')
@@ -76,6 +77,7 @@ summary('BMC_RECOVERY_OFFSET',get_option('bmc_recovery_offset'), section : 'PFR 
 summary('PCH_ACTIVE_PFM_OFFSET',get_option('pch_active_pfm_offset'), section : 'PFR Info')
 summary('PCH_STAGING_OFFSET',get_option('pch_staging_offset'), section : 'PFR Info')
 summary('PCH_RECOVERY_OFFSET',get_option('pch_recovery_offset'), section : 'PFR Info')
+summary('AFM_STAGING_OFFSET',get_option('afm_staging_offset'), section : 'PFR Info')
 
 # Copy aspeed-pfr-tool.conf to /usr/share/pfrconfig
 configure_file(input : 'aspeed-pfr-tool.conf.in',

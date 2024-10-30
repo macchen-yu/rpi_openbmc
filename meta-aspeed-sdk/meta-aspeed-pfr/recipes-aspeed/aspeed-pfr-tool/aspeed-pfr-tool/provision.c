@@ -271,10 +271,13 @@ int readUfmProvFifoCmd(ARGUMENTS args, MB_UFM_PROV_CMD_ENUM cmd, uint8_t *buf, i
 	return 0;
 }
 
-int writeUfmProvBmcPchRegionOffset(ARGUMENTS args)
+int writeUfmProvRegionOffset(ARGUMENTS args)
 {
 	uint8_t bmc_offset[12];
 	uint8_t pch_offset[12];
+#ifdef ENABLE_PFR_SPDM_ATTESTATION
+	uint8_t afm_offset[4];
+#endif
 
 	memcpy(bmc_offset, &args.bmc_active_pfm_offset, 4);
 	memcpy(bmc_offset + 4, &args.bmc_recovery_offset, 4);
@@ -282,12 +285,19 @@ int writeUfmProvBmcPchRegionOffset(ARGUMENTS args)
 	memcpy(pch_offset, &args.pch_active_pfm_offset, 4);
 	memcpy(pch_offset + 4, &args.pch_recovery_offset, 4);
 	memcpy(pch_offset + 8, &args.pch_staging_offset, 4);
+#ifdef ENABLE_PFR_SPDM_ATTESTATION
+	memcpy(afm_offset, &args.afm_staging_offset, 4);
+#endif
 
 	if (args.debug_flag) {
 		printf("BMC Offset\n");
 		printRawData(bmc_offset, sizeof(bmc_offset));
 		printf("PCH Offset\n");
 		printRawData(pch_offset, sizeof(pch_offset));
+#ifdef ENABLE_PFR_SPDM_ATTESTATION
+		printf("AFM Offset\n");
+		printRawData(afm_offset, sizeof(afm_offset));
+#endif
 	}
 
 	// Write BMC offset
@@ -301,6 +311,14 @@ int writeUfmProvBmcPchRegionOffset(ARGUMENTS args)
 		printf("Write UFM PCH offset failed\n");
 		return 1;
 	}
+
+#ifdef ENABLE_PFR_SPDM_ATTESTATION
+	// Write AFM offset
+	if (writeUfmProvFifoCmd(args, MB_UFM_PROV_AFM_OFFSET, afm_offset, sizeof(afm_offset))) {
+		printf("Write UFM AFM offset failed\n");
+		return 1;
+	}
+#endif
 
 	return 0;
 }
@@ -340,6 +358,15 @@ int provisionShow(ARGUMENTS args)
 	printf("PCH Recovery Region Offset : 0x%08x\n", *(uint32_t *)&read_buf[4]);
 	printf("PCH Staging Region Offset : 0x%08x\n", *(uint32_t *)&read_buf[8]);
 
+#ifdef ENABLE_PFR_SPDM_ATTESTATION
+	// Read AFM Offset
+	if (readUfmProvFifoCmd(args, MB_UFM_PROV_RD_AFM_OFFSET, read_buf, 4)) {
+		printf("Read UFM AFM offset failed\n");
+		return 1;
+	}
+	printf("AFM Staging Region Offset : 0x%08x\n", *(uint32_t *)&read_buf);
+#endif
+
 	// Read Root Key hash
 	if (readUfmProvFifoCmd(args, MB_UFM_PROV_RD_ROOT_KEY, read_buf, SHA384_LENGTH)) {
 		printf("Read UFM root key hash failed\n");
@@ -376,8 +403,8 @@ int doProvision(ARGUMENTS args)
 		printRawData(write_buffer, hashLen);
 	}
 
-	// Write BMC, PCH region offset
-	if (writeUfmProvBmcPchRegionOffset(args)) {
+	// Write BMC, PCH, AFM region offset
+	if (writeUfmProvRegionOffset(args)) {
 		printf("Write UFM BMC/PCH offset failed\n");
 		return 1;
 	}

@@ -55,6 +55,13 @@ option(
 )
 
 option(
+    'afm_staging_offset',
+    type: 'string',
+    value: '0x0C2E0000',
+    description: 'AFM Staging Region Offset'
+)
+
+option(
     'mctp',
     type: 'feature',
     value: 'enabled',
