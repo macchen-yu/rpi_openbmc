@@ -29,13 +29,8 @@ MULTILIB_SCRIPTS = "${PN}-bin:${bindir}/c_rehash"
 PACKAGECONFIG ?= ""
 PACKAGECONFIG:class-native = ""
 PACKAGECONFIG:class-nativesdk = ""
-# WORKAROUND
-# Disable cryptodev due to build failed with kernel 6.6
-# PACKAGECONFIG:class-target = "cryptodev-linux"
 
-# Change to use cryptodev with ASPEED changes
-# PACKAGECONFIG[cryptodev-linux] = "enable-devcryptoeng,disable-devcryptoeng,cryptodev-linux,,cryptodev-module"
-PACKAGECONFIG[cryptodev-linux] = "enable-devcryptoeng,disable-devcryptoeng,cryptodev,,kernel-module-cryptodev"
+PACKAGECONFIG[cryptodev-linux] = "enable-devcryptoeng,disable-devcryptoeng,cryptodev-linux,,cryptodev-module"
 PACKAGECONFIG[no-tls1] = "no-tls1"
 PACKAGECONFIG[no-tls1_1] = "no-tls1_1"
 PACKAGECONFIG[manpages] = ""
