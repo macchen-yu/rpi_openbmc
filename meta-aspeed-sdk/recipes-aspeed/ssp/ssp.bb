@@ -9,18 +9,16 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 PR = "r0"
 
-SRC_URI = "file://ast2600_ssp.bin;subdir=${S} \
-           file://ast2700-ssp.bin;subdir=${S} \
-          "
+SSP_FIRMWARE ?= "ast2700-ssp.bin"
+SSP_FIRMWARE:aspeed-g6 ?= "ast2600_ssp.bin"
+
+SRC_URI = "file://${SSP_FIRMWARE};subdir=${S}"
 
 do_patch[noexec] = "1"
 do_configure[noexec] = "1"
 do_compile[noexec] = "1"
 
 inherit deploy
-
-SSP_FIRMWARE ?= "ast2700-ssp.bin"
-SSP_FIRMWARE:aspeed-g6 ?= "ast2600_ssp.bin"
 
 do_install () {
     if [ "${SOC_FAMILY}" = "aspeed-g6" ]; then
