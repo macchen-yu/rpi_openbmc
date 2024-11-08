@@ -3,6 +3,7 @@ IMAGE_FSTYPES = "${INITRAMFS_FSTYPES}"
 require recipes-core/images/core-image-minimal.bb
 
 IMAGE_INSTALL:append = " \
+        packagegroup-base \
         packagegroup-oss-apps \
         packagegroup-oss-extended \
         packagegroup-oss-libs \
