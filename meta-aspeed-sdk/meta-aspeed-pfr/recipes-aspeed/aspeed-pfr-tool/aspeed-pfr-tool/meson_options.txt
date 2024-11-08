@@ -62,13 +62,6 @@ option(
 )
 
 option(
-    'mctp',
-    type: 'feature',
-    value: 'enabled',
-    description: 'Enable the PFR MCTP'
-)
-
-option(
     'attestation',
     type: 'feature',
     value: 'enabled',

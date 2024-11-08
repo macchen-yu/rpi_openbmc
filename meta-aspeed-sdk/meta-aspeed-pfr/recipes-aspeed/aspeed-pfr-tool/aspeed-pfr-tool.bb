@@ -38,9 +38,8 @@ FILES:${PN}:append = " ${datadir}/pfrconfig"
 
 PACKAGECONFIG ??= ""
 
-PACKAGECONFIG:append:intel-pfr = " mctp attestation pfr-5-0-secure-conn"
+PACKAGECONFIG:append:intel-pfr = " attestation pfr-5-0-secure-conn"
 
-PACKAGECONFIG[mctp] = "-Dmctp=enabled, -Dmctp=disabled"
 PACKAGECONFIG[attestation] = "-Dattestation=enabled, -Dattestation=disabled,, spdm-emu"
 PACKAGECONFIG[pfr-5-0-secure-conn] = "-Dsecure_connection=enabled, -Dsecure_connection=disabled, spdm-emu"
 PACKAGECONFIG[pfr-5-0-secure-test-case] = "-Dsecure_test_case=enabled, -Dsecure_test_case=disabled, spdm-emu"

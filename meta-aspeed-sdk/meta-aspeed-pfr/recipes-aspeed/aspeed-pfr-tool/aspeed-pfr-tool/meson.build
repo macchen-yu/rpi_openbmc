@@ -18,7 +18,6 @@ incdir = include_directories(
 # Get the options and enable the respective features
 ## create a MAP of  "options : feature_flag"
 feature_map = {
-    'mctp' : '-DENABLE_PFR_MCTP',
     'attestation' : '-DENABLE_PFR_SPDM_ATTESTATION',
     'secure_connection' : '-DSUPPORT_SECURE_CONNECTION',
     'secure_test_case' : '-DSECURE_TEST_CASE',
