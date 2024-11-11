@@ -88,15 +88,17 @@ UBOOT_FIT_ADDRESS_CELLS ?= "1"
 # This is only necessary for determining the signing configuration
 KERNEL_PN = "${PREFERRED_PROVIDER_virtual/kernel}"
 
-# Trusted Firmware-A (TF-A) provides a reference implementation of secure world software for Armv7-A and Armv8-A,
-# including a Secure Monitor executing at Exception Level 3 (EL3)
-# ATF is used as the initial start code on ARMv8-A cores for all K3 platforms
-UBOOT_FIT_ARM_TRUSTED_FIRMWARE_A ?= "0"
-UBOOT_FIT_ARM_TRUSTED_FIRMWARE_A_IMAGE ?= "bl31.bin"
+# ARM Trusted Firmware(ATF) is a reference implementation of secure world
+# software for Arm A-Profile architectures, (Armv8-A and Armv7-A), including
+# an Exception Level 3 (EL3) Secure Monitor.
+UBOOT_FIT_ARM_TRUSTED_FIRMWARE ?= "0"
+UBOOT_FIT_ARM_TRUSTED_FIRMWARE_IMAGE ?= "bl31.bin"
 
-# OP-TEE is a Trusted Execution Environment (TEE) designed as companion to a non-secure Linux kernel running on Arm
-UBOOT_FIT_OPTEE_OS ?= "0"
-UBOOT_FIT_OPTEE_OS_IMAGE ?= "tee-raw.bin"
+# A Trusted Execution Environment (TEE) is an environment for executing code,
+# in which those executing the code can have high levels of trust in the asset
+# management of that surrounding environment.
+UBOOT_FIT_TEE ?= "0"
+UBOOT_FIT_TEE_IMAGE ?= "tee-raw.bin"
 
 UBOOT_FIT_UBOOT_LOADADDRESS ?= "${UBOOT_LOADADDRESS}"
 UBOOT_FIT_UBOOT_ENTRYPOINT ?= "${UBOOT_ENTRYPOINT}"
@@ -250,14 +252,14 @@ uboot_fitimage_assemble() {
 	conf_loadables="\"uboot\""
 	conf_firmware=""
 
-	if [ "${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_A}" = "1" ]; then
+	if [ "${UBOOT_FIT_ARM_TRUSTED_FIRMWARE}" = "1" ]; then
 		conf_firmware="\"atf\""
-		if [ "${UBOOT_FIT_OPTEE_OS}" = "1" ]; then
-			conf_loadables="\"uboot\", \"optee\""
+		if [ "${UBOOT_FIT_TEE}" = "1" ]; then
+			conf_loadables="\"uboot\", \"tee\""
 		fi
 	else
-		if [ "${UBOOT_FIT_OPTEE_OS}" = "1" ]; then
-			conf_firmware="\"optee\""
+		if [ "${UBOOT_FIT_TEE}" = "1" ]; then
+			conf_firmware="\"tee\""
 		fi
 	fi
 
@@ -314,16 +316,16 @@ EOF
 	cat << EOF >> ${UBOOT_ITS}
         };
 EOF
-	if [ "${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_A}" = "1" ] ; then
+	if [ "${UBOOT_FIT_ARM_TRUSTED_FIRMWARE}" = "1" ] ; then
 		cat << EOF >> ${UBOOT_ITS}
         atf {
-            description = "ARM Trusted Firmware-A";
-            data = /incbin/("${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_A_IMAGE}");
+            description = "ARM Trusted Firmware";
+            data = /incbin/("${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_IMAGE}");
             type = "firmware";
             arch = "${UBOOT_ARCH}";
             os = "arm-trusted-firmware";
-            load = <${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_A_LOADADDRESS}>;
-            entry = <${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_A_ENTRYPOINT}>;
+            load = <${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_LOADADDRESS}>;
+            entry = <${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_ENTRYPOINT}>;
             compression = "none";
 EOF
 
@@ -341,16 +343,16 @@ EOF
 EOF
 	fi
 
-	if [ "${UBOOT_FIT_OPTEE_OS}" = "1" ] ; then
+	if [ "${UBOOT_FIT_TEE}" = "1" ] ; then
 		cat << EOF >> ${UBOOT_ITS}
-        optee {
-            description = "OPTEE OS Image";
-            data = /incbin/("${UBOOT_FIT_OPTEE_OS_IMAGE}");
+        tee {
+            description = "Trusted Execution Environment";
+            data = /incbin/("${UBOOT_FIT_TEE_IMAGE}");
             type = "tee";
             arch = "${UBOOT_ARCH}";
             os = "tee";
-            load = <${UBOOT_FIT_OPTEE_OS_LOADADDRESS}>;
-            entry = <${UBOOT_FIT_OPTEE_OS_ENTRYPOINT}>;
+            load = <${UBOOT_FIT_TEE_LOADADDRESS}>;
+            entry = <${UBOOT_FIT_TEE_ENTRYPOINT}>;
             compression = "none";
 EOF
 
