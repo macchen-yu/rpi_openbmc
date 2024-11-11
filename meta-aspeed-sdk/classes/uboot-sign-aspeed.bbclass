@@ -100,6 +100,10 @@ UBOOT_FIT_ARM_TRUSTED_FIRMWARE_IMAGE ?= "bl31.bin"
 UBOOT_FIT_TEE ?= "0"
 UBOOT_FIT_TEE_IMAGE ?= "tee-raw.bin"
 
+# It is searched first. If not found, "loadables" is used to identify images
+# to be loaded into memory.
+UBOOT_FIT_CONF_FIRMWARE ?= ""
+
 UBOOT_FIT_UBOOT_LOADADDRESS ?= "${UBOOT_LOADADDRESS}"
 UBOOT_FIT_UBOOT_ENTRYPOINT ?= "${UBOOT_ENTRYPOINT}"
 
@@ -368,6 +372,13 @@ EOF
         default = "conf";
         conf {
             description = "Boot with signed U-Boot FIT";
+EOF
+	if [ -n "${UBOOT_FIT_CONF_FIRMWARE}" ] ; then
+		cat << EOF >> ${UBOOT_ITS}
+            firmware = "${UBOOT_FIT_CONF_FIRMWARE}";
+EOF
+	fi
+	cat << EOF >> ${UBOOT_ITS}
             loadables = ${conf_loadables};
             fdt = "fdt";
         };
