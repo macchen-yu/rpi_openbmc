@@ -250,19 +250,6 @@ addtask uboot_generate_rsa_keys before do_uboot_assemble_fitimage after do_compi
 # we want to sign it so that the SPL can verify it
 uboot_fitimage_assemble() {
 	conf_loadables="\"uboot\""
-	conf_firmware=""
-
-	if [ "${UBOOT_FIT_ARM_TRUSTED_FIRMWARE}" = "1" ]; then
-		conf_firmware="\"atf\""
-		if [ "${UBOOT_FIT_TEE}" = "1" ]; then
-			conf_loadables="\"uboot\", \"tee\""
-		fi
-	else
-		if [ "${UBOOT_FIT_TEE}" = "1" ]; then
-			conf_firmware="\"tee\""
-		fi
-	fi
-
 	rm -f ${UBOOT_ITS} ${UBOOT_FITIMAGE_BINARY}
 
 	# First we create the ITS script
@@ -316,34 +303,9 @@ EOF
 	cat << EOF >> ${UBOOT_ITS}
         };
 EOF
-	if [ "${UBOOT_FIT_ARM_TRUSTED_FIRMWARE}" = "1" ] ; then
-		cat << EOF >> ${UBOOT_ITS}
-        atf {
-            description = "ARM Trusted Firmware";
-            data = /incbin/("${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_IMAGE}");
-            type = "firmware";
-            arch = "${UBOOT_ARCH}";
-            os = "arm-trusted-firmware";
-            load = <${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_LOADADDRESS}>;
-            entry = <${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_ENTRYPOINT}>;
-            compression = "none";
-EOF
-
-		if [ "${SPL_SIGN_ENABLE}" = "1" ] ; then
-			cat << EOF >> ${UBOOT_ITS}
-            signature {
-                algo = "${UBOOT_FIT_HASH_ALG},${UBOOT_FIT_SIGN_ALG}";
-                key-name-hint = "${SPL_SIGN_KEYNAME}";
-            };
-EOF
-		fi
-
-	cat << EOF >> ${UBOOT_ITS}
-        };
-EOF
-	fi
-
 	if [ "${UBOOT_FIT_TEE}" = "1" ] ; then
+		conf_loadables="\"tee\", ${conf_loadables}"
+
 		cat << EOF >> ${UBOOT_ITS}
         tee {
             description = "Trusted Execution Environment";
@@ -370,6 +332,35 @@ EOF
 EOF
 	fi
 
+	if [ "${UBOOT_FIT_ARM_TRUSTED_FIRMWARE}" = "1" ] ; then
+		conf_loadables="\"atf\", ${conf_loadables}"
+
+		cat << EOF >> ${UBOOT_ITS}
+        atf {
+            description = "ARM Trusted Firmware";
+            data = /incbin/("${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_IMAGE}");
+            type = "firmware";
+            arch = "${UBOOT_ARCH}";
+            os = "arm-trusted-firmware";
+            load = <${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_LOADADDRESS}>;
+            entry = <${UBOOT_FIT_ARM_TRUSTED_FIRMWARE_ENTRYPOINT}>;
+            compression = "none";
+EOF
+
+		if [ "${SPL_SIGN_ENABLE}" = "1" ] ; then
+			cat << EOF >> ${UBOOT_ITS}
+            signature {
+                algo = "${UBOOT_FIT_HASH_ALG},${UBOOT_FIT_SIGN_ALG}";
+                key-name-hint = "${SPL_SIGN_KEYNAME}";
+            };
+EOF
+		fi
+
+	cat << EOF >> ${UBOOT_ITS}
+        };
+EOF
+	fi
+
 	cat << EOF >> ${UBOOT_ITS}
     };
 
@@ -377,13 +368,6 @@ EOF
         default = "conf";
         conf {
             description = "Boot with signed U-Boot FIT";
-EOF
-	if [ -n "${conf_firmware}" ]; then
-	cat << EOF >> ${UBOOT_ITS}
-            firmware = ${conf_firmware};
-EOF
-	fi
-	cat << EOF >> ${UBOOT_ITS}
             loadables = ${conf_loadables};
             fdt = "fdt";
         };
