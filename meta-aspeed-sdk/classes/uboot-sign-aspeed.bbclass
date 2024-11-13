@@ -104,6 +104,13 @@ UBOOT_FIT_TEE_IMAGE ?= "tee-raw.bin"
 # to be loaded into memory.
 UBOOT_FIT_CONF_FIRMWARE ?= ""
 
+# User specific image
+UBOOT_FIT_USER_IMAGE ?= "0"
+
+# Unit name containing a list of users additional binaries to be loaded.
+# It is a comma-separated list of strings.
+UBOOT_FIT_CONF_USER_LOADABLES ?= ''
+
 UBOOT_FIT_UBOOT_LOADADDRESS ?= "${UBOOT_LOADADDRESS}"
 UBOOT_FIT_UBOOT_ENTRYPOINT ?= "${UBOOT_ENTRYPOINT}"
 
@@ -250,6 +257,12 @@ do_uboot_generate_rsa_keys() {
 
 addtask uboot_generate_rsa_keys before do_uboot_assemble_fitimage after do_compile
 
+# Create a ITS file for the user specific image. It is an empty function and
+# users should create a bbappend to overwrite this function
+uboot_fitimage_user_image() {
+	bbwarn "Please add your specific image ITS settings for u-boot FIT image generation."
+}
+
 # Create a ITS file for the atf
 uboot_fitimage_atf() {
 	cat << EOF >> ${UBOOT_ITS}
@@ -371,6 +384,12 @@ EOF
 		uboot_fitimage_atf
 	fi
 
+	if [ "${UBOOT_FIT_USER_IMAGE}" = "1" ] ; then
+		if [ -n "${UBOOT_FIT_CONF_USER_LOADABLES}" ] ; then
+			conf_loadables="${conf_loadables}${UBOOT_FIT_CONF_USER_LOADABLES}"
+		fi
+		uboot_fitimage_user_image
+	fi
 	cat << EOF >> ${UBOOT_ITS}
     };
 
