@@ -11,7 +11,6 @@ RPROVIDES:${PN} = "${PACKAGES}"
 
 PACKAGES = " \
     ${PN}-apps \
-    ${PN}-ssp \
     ${PN}-crypto \
     ${PN}-ssif \
     ${PN}-mtdtest \
@@ -22,14 +21,6 @@ PACKAGES = " \
 SUMMARY:${PN}-apps = "AspeedTech Test App"
 RDEPENDS:${PN}-apps = " \
     aspeed-app \
-    "
-
-SUMMARY:${PN}-ssp = "AspeedTech Secondary Service Processor"
-RDEPENDS:${PN}-ssp = " \
-    ssp \
-    "
-RRECOMMENDS:${PN}-ssp= " \
-    kernel-module-aspeed-ssp \
     "
 
 SUMMARY:${PN}-crypto = "AspeedTech Crypto"

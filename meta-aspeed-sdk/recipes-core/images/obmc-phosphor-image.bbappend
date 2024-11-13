@@ -13,7 +13,6 @@ IMAGE_INSTALL:append = " \
         packagegroup-aspeed-crypto \
         packagegroup-aspeed-ssif \
         packagegroup-aspeed-obmc-inband \
-        ${@bb.utils.contains('MACHINE_FEATURES', 'ast-ssp', 'packagegroup-aspeed-ssp', '', d)} \
         packagegroup-aspeed-mtdtest \
         packagegroup-aspeed-usbtools \
         ${@bb.utils.contains('DISTRO_FEATURES', 'tpm', \
@@ -29,6 +28,11 @@ IMAGE_INSTALL:append = " \
 IMAGE_INSTALL:remove:aspeed-g5 = " \
         packagegroup-aspeed-ktools \
         packagegroup-oss-extra \
+        "
+
+# packagegroup for ast2600
+IMAGE_INSTALL:append:aspeed-g6 = " \
+        ${@bb.utils.contains('MACHINE_FEATURES', 'ast-ssp', 'packagegroup-aspeed-coprocessor-ssp', '', d)} \
         "
 
 # packagegroup for ast2700
