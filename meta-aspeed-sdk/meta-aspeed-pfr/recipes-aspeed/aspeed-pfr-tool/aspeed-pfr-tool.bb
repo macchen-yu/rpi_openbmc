@@ -31,6 +31,7 @@ DEPENDS = "openssl i2c-tools"
 RDEPENDS:${PN} = "openssl i2c-tools"
 
 do_install:append() {
+    install -d ${D}/${datadir}/pfrconfig
     install -m 0644 ${S}/aspeed-pfr-tool-egs.conf ${D}/${datadir}/pfrconfig/
 }
 

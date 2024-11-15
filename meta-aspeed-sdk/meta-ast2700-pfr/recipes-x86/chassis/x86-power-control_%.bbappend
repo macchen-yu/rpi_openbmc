@@ -9,7 +9,7 @@ SRC_URI:append = " file://power-config-host0.json \
 # We need to wait power-status-sync.service start running and update SGPIO value to DBus.
 DEPS_CFG = "power.conf"
 DEPS_TGT = "xyz.openbmc_project.Chassis.Control.Power@.service"
-SYSTEMD_OVERRIDE:${PN}:append = "${DEPS_CFG}:${DEPS_TGT}.d/${DEPS_CFG}"
+SYSTEMD_OVERRIDE:${PN}:append:ast2700-a0 = "${DEPS_CFG}:${DEPS_TGT}.d/${DEPS_CFG}"
 
 
 do_install:append() {

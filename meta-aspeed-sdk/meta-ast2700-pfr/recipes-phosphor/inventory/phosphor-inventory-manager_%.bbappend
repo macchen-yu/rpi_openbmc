@@ -1,1 +1,1 @@
-DEPENDS:append = " static-inventory"
+DEPENDS:append:ast2700-a0 = " static-inventory"
