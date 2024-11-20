@@ -28,6 +28,10 @@ UBOOT_FIT_TSP_LOADADDRESS ?= "0xb4000000"
 UBOOT_FIT_TSP_ENTRYPOINT ?= "0xb4000000"
 
 # kernel fitimage
+# Use lzma compressed algorithm instead of gzip to save the code size.
+FIT_KERNEL_COMP_ALG ?= "lzma"
+FIT_KERNEL_COMP_ALG_EXTENSION ?= ".lzma"
+
 FIT_ADDRESS_CELLS ?= "2"
 UBOOT_ENTRYPOINT ?= "0x4 0x00000000"
 UBOOT_LOADADDRESS ?= "0x4 0x00000000"
