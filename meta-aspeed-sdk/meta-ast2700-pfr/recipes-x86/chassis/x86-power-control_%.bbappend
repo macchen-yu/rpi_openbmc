@@ -16,3 +16,8 @@ do_install:append() {
     install -d ${D}${datadir}/${PN}
     install -m 0644 ${WORKDIR}/power-config-host0.json ${D}${datadir}/${PN}
 }
+
+# Add nostamp to avoid build failure when the machine changes from ast2700-a0 to a1.
+do_configure[nostamp] = "1"
+do_compile[nostamp] = "1"
+do_install[nostamp] = "1"
