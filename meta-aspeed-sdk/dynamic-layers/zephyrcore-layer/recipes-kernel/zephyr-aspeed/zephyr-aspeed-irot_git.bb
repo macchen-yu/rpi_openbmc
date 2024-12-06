@@ -12,3 +12,27 @@ SRCREV_aspeed-irot = "${AUTOREV}"
 ASPEED_ZEPHYR_PROJECT_BRANCH = "aspeed-irot"
 
 ZEPHYR_SRC_DIR = "${S}/aspeed-zephyr-project/apps/aspeed-irot"
+
+DEPENDS += "fmc-imgtool-native"
+
+inherit python3-dir
+
+ZEPHYR_MAKE_OUTPUT:append = " fmc-zephyr.bin"
+
+# export CRYPTOGRAPHY_OPENSSL_NO_LEGACY variable to fix the following errors.
+# OpenSSL 3.0 legacy provider failed to load
+# https://github.com/pyca/cryptography/issues/10598
+do_create_fmc_image() {
+    export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
+
+    cd ${STAGING_LIBDIR_NATIVE}/${PYTHON_DIR}/fmc-imgtool
+    python3 main.py \
+        --verbose \
+        --version 2 \
+        --input ${B}/zephyr/zephyr.bin \
+        --output ${B}/zephyr/fmc-zephyr.bin
+    cd -
+}
+
+addtask create_fmc_image before do_install do_deploy after do_compile
+
