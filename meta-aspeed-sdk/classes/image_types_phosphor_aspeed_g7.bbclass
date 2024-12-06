@@ -10,9 +10,19 @@ do_generate_ext4_tar:append() {
     install -m 644 image-u-boot ${IMGDEPLOYDIR}/image-u-boot
 }
 
-# Merge bootmcu and u-boot image
+# Merge Caliptra, bootmcu and u-boot image
 do_merge_uboot() {
-    mk_empty_image_zeros ${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX} ${FLASH_BMCU_SIZE}
+    uboot_offset=0
+
+    # Check for Caliptra. If it exists, merge the Caliptra image with the U-Boot image.
+    if [ ! -z ${CALIPTRA_FW_BINARY} ]; then
+        mk_empty_image_zeros ${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX} ${FLASH_CALIPTRA_SIZE}
+        # Concatenate Caliptra and u-boot image
+        dd bs=1k seek=0 if=${DEPLOY_DIR_IMAGE}/${CALIPTRA_FW_BINARY} of=${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX}
+        uboot_offset=${FLASH_CALIPTRA_SIZE}
+    else
+        mk_empty_image_zeros ${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX} ${FLASH_BMCU_SIZE}
+    fi
 
     # Check bootmcu size
     imgpath=${DEPLOY_DIR_IMAGE}/${BOOTMCU_FW_BINARY}
@@ -25,9 +35,10 @@ do_merge_uboot() {
     fi
 
     # Concatenate bootmcu and u-boot image
-    dd bs=1k seek=0 if=${DEPLOY_DIR_IMAGE}/${BOOTMCU_FW_BINARY} of=${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX}
+    dd bs=1k seek=${uboot_offset} if=${DEPLOY_DIR_IMAGE}/${BOOTMCU_FW_BINARY} of=${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX}
+    uboot_offset=$(expr ${uboot_offset} + ${FLASH_BMCU_SIZE})
 
-    dd bs=1k seek=${FLASH_BMCU_SIZE} if=${DEPLOY_DIR_IMAGE}/${UBOOT_BINARY} of=${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX}
+    dd bs=1k seek=${uboot_offset} if=${DEPLOY_DIR_IMAGE}/${UBOOT_BINARY} of=${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX}
 }
 
 do_merge_uboot[depends] += " \

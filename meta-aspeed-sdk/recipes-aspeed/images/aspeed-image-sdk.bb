@@ -67,12 +67,22 @@ python do_deploy() {
 
     uboot_offset = int(d.getVar('FLASH_UBOOT_OFFSET', True))
 
+    # Caliptra
+    caliptra_fw_binary = d.getVar('CALIPTRA_FW_BINARY', True)
+    if caliptra_fw_binary:
+        caliptra_fw_finish_kb = int(d.getVar('FLASH_CALIPTRA_SIZE', True))
+        _append_image(os.path.join(d.getVar('DEPLOY_DIR_IMAGE', True),
+                                   '%s' % (d.getVar('CALIPTRA_FW_BINARY', True))),
+                      uboot_offset,
+                      caliptra_fw_finish_kb)
+        uboot_offset += caliptra_fw_finish_kb
+
     # bootmcu
     if bootmcu_fw_binary:
         bootmcu_fw_finish_kb = int(d.getVar('FLASH_BMCU_SIZE', True))
         _append_image(os.path.join(d.getVar('DEPLOY_DIR_IMAGE', True),
                                    '%s' % (d.getVar('BOOTMCU_FW_BINARY', True))),
-                      0,
+                      uboot_offset,
                       bootmcu_fw_finish_kb)
         uboot_offset += bootmcu_fw_finish_kb
 
@@ -83,7 +93,7 @@ python do_deploy() {
                                    '%s.%s' % (
                                    d.getVar('ASPEED_IMAGE_UBOOT_SPL_IMAGE', True),
                                    d.getVar('UBOOT_SUFFIX', True))),
-                      0,
+                      uboot_offset,
                       spl_finish_kb)
         uboot_offset += spl_finish_kb
 
