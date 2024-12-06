@@ -25,9 +25,11 @@ do_install() {
     install -d -m 0755 ${D}${libdir}/${PYTHON_DIR}
     install -d -m 0755 ${D}${libdir}/${PYTHON_DIR}/${BPN}
     install -d -m 0755 ${D}${libdir}/${PYTHON_DIR}/${BPN}/prebuilt
+    install -d -m 0755 ${D}${libdir}/${PYTHON_DIR}/${BPN}/keys
 
     install -m 0644 ${S}/*.py ${D}${libdir}/${PYTHON_DIR}/${BPN}
     install -m 0644 ${S}/prebuilt/* ${D}${libdir}/${PYTHON_DIR}/${BPN}/prebuilt
+    install -m 0644 ${S}/keys/* ${D}${libdir}/${PYTHON_DIR}/${BPN}/keys
 }
 
 BBCLASSEXTEND = "native nativesdk"
