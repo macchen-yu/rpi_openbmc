@@ -13,7 +13,7 @@ PV = "1.0+git"
 
 S = "${WORKDIR}/git"
 
-inherit python3native
+inherit python3native deploy
 
 DEPENDS += "python3-cryptography"
 DEPENDS += "python3-pyhsslms"
@@ -31,6 +31,16 @@ do_install() {
     install -m 0644 ${S}/prebuilt/* ${D}${libdir}/${PYTHON_DIR}/${BPN}/prebuilt
     install -m 0644 ${S}/keys/* ${D}${libdir}/${PYTHON_DIR}/${BPN}/keys
 }
+
+do_deploy() {
+    :
+}
+
+do_deploy:class-native() {
+    install -m 0644 ${S}/prebuilt/* ${DEPLOYDIR}/.
+}
+
+addtask deploy before do_build after do_compile
 
 BBCLASSEXTEND = "native nativesdk"
 
