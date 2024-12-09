@@ -18,8 +18,8 @@ ASPEED_IMAGE_KERNEL_IMAGE ?= "fitImage-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
 ASPEED_IMAGE_NAME ?= "all.bin"
 ASPEED_BOOT_EMMC_UFS ?= "${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'yes', 'no', d)}"
 
-IMAGE_FSTYPES += "${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'wic.xz mmc-ext4-tar', 'no', d)}"
-IMAGE_FEATURES += "${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'read-only-rootfs-delayed-postinsts', 'no', d)}"
+#IMAGE_FSTYPES += "${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'wic.xz mmc-ext4-tar', 'no', d)}"
+#IMAGE_FEATURES += "${@bb.utils.contains_any('MACHINE_FEATURES', ['ast-mmc', 'ast-ufs'], 'read-only-rootfs-delayed-postinsts', 'no', d)}"
 
 # Flash characteristics in KB unless otherwise noted
 DISTROOVERRIDES .= ":flash-${FLASH_SIZE}"
@@ -120,22 +120,6 @@ python do_deploy() {
                            '-D',
                            '%s' % nor_image,
                            '%s' % dest_image])
-}
-
-python do_deploy:ast-mmc() {
-    initramfs_image = d.getVar('INITRAMFS_IMAGE', True)
-    if initramfs_image != "aspeed-image-initramfs":
-         bb.fatal('Not support ' + str(initramfs_image) + ' INITRAMFS_IMAGE')
-
-    bb.debug(1, "MMC mode do nothing")
-}
-
-python do_deploy:ast-ufs() {
-    initramfs_image = d.getVar('INITRAMFS_IMAGE', True)
-    if initramfs_image != "aspeed-image-initramfs":
-         bb.fatal('Not support ' + str(initramfs_image) + ' INITRAMFS_IMAGE')
-
-    bb.debug(1, "UFS mode do nothing")
 }
 
 do_deploy[depends] = " \
