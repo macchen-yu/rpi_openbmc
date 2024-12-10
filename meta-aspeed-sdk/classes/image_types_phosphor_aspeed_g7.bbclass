@@ -17,6 +17,15 @@ do_merge_uboot() {
     # Check for Caliptra. If it exists, merge the Caliptra image with the U-Boot image.
     if [ ! -z ${CALIPTRA_FW_BINARY} ]; then
         mk_empty_image_zeros ${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX} ${FLASH_CALIPTRA_SIZE}
+        # Check Caliptra size
+        imgpath=${DEPLOY_DIR_IMAGE}/${CALIPTRA_FW_BINARY}
+        imgsize=$(wc -c < "$imgpath")
+        maxsize=$(expr ${FLASH_CALIPTRA_SIZE} \* 1024)
+        if [ "$imgsize" -gt "$maxsize" ]; then
+            echo "Error: CALIPTRA_FW $imgpath size ($imgsize bytes) exceeds $maxsize."
+            exit 1
+        fi
+
         # Concatenate Caliptra and u-boot image
         dd bs=1k seek=0 if=${DEPLOY_DIR_IMAGE}/${CALIPTRA_FW_BINARY} of=${DEPLOY_DIR_IMAGE}/u-boot.${UBOOT_SUFFIX}
         uboot_offset=${FLASH_CALIPTRA_SIZE}
@@ -30,7 +39,7 @@ do_merge_uboot() {
     maxsize=$(expr ${FLASH_BMCU_SIZE} \* 1024)
 
     if [ "$imgsize" -gt "$maxsize" ]; then
-        echo "Error: BOOTMCU image size ($imgsize bytes) exceeds $maxsize."
+        echo "Error: BOOTMCU $imgpath size ($imgsize bytes) exceeds $maxsize."
         exit 1
     fi
 
