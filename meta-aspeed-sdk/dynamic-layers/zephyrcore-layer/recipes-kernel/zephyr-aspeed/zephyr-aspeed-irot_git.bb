@@ -11,6 +11,10 @@ ZEPHYR_BRANCH = "aspeed-dev-v3.7.0"
 SRCREV_aspeed-irot = "${AUTOREV}"
 ASPEED_ZEPHYR_PROJECT_BRANCH = "aspeed-irot"
 
+# mcuboot
+SRCREV_mcuboot = "${AUTOREV}"
+ZEPHYR_MCUBOOT_BRANCH = "aspeed-dev-v3.7.0"
+
 ZEPHYR_SRC_DIR = "${S}/aspeed-zephyr-project/apps/aspeed-irot"
 
 DEPENDS += "fmc-imgtool-native"
