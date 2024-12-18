@@ -17,7 +17,7 @@ ZEPHYR_MCUBOOT_BRANCH = "aspeed-dev-v3.7.0"
 
 ZEPHYR_SRC_DIR = "${S}/aspeed-zephyr-project/apps/aspeed-irot"
 
-DEPENDS += "fmc-imgtool-native"
+DEPENDS += "dtc-native fmc-imgtool-native"
 
 inherit python3-dir
 

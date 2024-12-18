@@ -25,9 +25,6 @@ ZEPHYR_SDK_DIR = "${prefix}/zephyr-sdk"
 do_install() {
     install -d ${D}${prefix}
     cp -r ${S}/zephyr-sdk-${PV} ${D}${ZEPHYR_SDK_DIR}
-
-    # Install host tools
-    ${D}${ZEPHYR_SDK_DIR}/setup.sh -h
 }
 
 SYSROOT_DIRS += "${ZEPHYR_SDK_DIR}"
