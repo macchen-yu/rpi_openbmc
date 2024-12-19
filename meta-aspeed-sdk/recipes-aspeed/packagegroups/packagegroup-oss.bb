@@ -26,6 +26,7 @@ PACKAGES = " \
 SUMMARY:${PN}-apps = "Open Source Applications"
 RDEPENDS:${PN}-apps = " \
     mdio-tool \
+    mdio-tools \
     gperf \
     iperf3 \
     pciutils \
@@ -71,6 +72,7 @@ RDEPENDS:${PN}-intel-pmci = " \
 
 # Only install in AST26xx and AST27xx series rofs as the free space of AST25xx rofs is not enough.
 RDEPENDS:${PN}-apps:remove:aspeed-g5 = " \
+    mdio-tools \
     i3c-tools \
     iozone3 \
     hdparm \
