@@ -42,3 +42,8 @@ do_create_fmc_image() {
 
 addtask create_fmc_image before do_install do_deploy after do_compile
 
+do_deploy:append() {
+    cd ${DEPLOYDIR}
+    ln -sf fmc-${BPN}.bin bootmcu-fmc.bin
+    cd -
+}
