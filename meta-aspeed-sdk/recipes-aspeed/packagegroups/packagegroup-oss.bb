@@ -25,7 +25,7 @@ PACKAGES = " \
 # https://github.com/AspeedTech-BMC/openbmc/blob/aspeed-master/meta-openembedded/meta-oe/recipes-bsp/nvme-cli/nvme-cli_2.6.bb
 SUMMARY:${PN}-apps = "Open Source Applications"
 RDEPENDS:${PN}-apps = " \
-    mdio-tool \
+    pievo-mdio-tool \
     mdio-tools \
     gperf \
     iperf3 \
