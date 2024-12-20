@@ -58,4 +58,6 @@ ZEPHYR_TOOLCHAIN_VARIANT = "zephyr"
 
 # bootmcu
 PREFERRED_PROVIDER_virtual/bootmcu:ast2700-a0 ?= "bootmcu-spl"
-PREFERRED_PROVIDER_virtual/bootmcu ?= "zephyr-aspeed-bootmcu"
+# Currently, only support pre-built image
+PREFERRED_PROVIDER_virtual/bootmcu ?= "zephyr-aspeed-bootmcu-prebuilt"
+#PREFERRED_PROVIDER_virtual/bootmcu ?= "zephyr-aspeed-bootmcu"
