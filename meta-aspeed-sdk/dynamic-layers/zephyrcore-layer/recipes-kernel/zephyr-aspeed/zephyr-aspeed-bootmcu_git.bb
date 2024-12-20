@@ -1,6 +1,10 @@
 require recipes-kernel/zephyr-kernel/zephyr-image.inc
 require zephyr-aspeed-src.inc
 
+SUMMARY = "BootMCU execute Zephyr OS"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+
+PROVIDES += "virtual/bootmcu"
 PV = "1.0+git"
 
 # zephyr
@@ -18,8 +22,6 @@ ZEPHYR_MCUBOOT_BRANCH = "aspeed-dev-v3.7.0"
 ZEPHYR_SRC_DIR = "${S}/aspeed-zephyr-project/apps/aspeed-irot"
 
 DEPENDS += "dtc-native fmc-imgtool-native"
-
-inherit python3-dir
 
 ZEPHYR_MAKE_OUTPUT:append = " fmc-zephyr.bin"
 

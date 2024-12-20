@@ -1,9 +1,5 @@
 # Refer to meta-zephyr/meta-zephyr-core/recipes-kernel/zephyr-kernel/zephyr-kernel-src-x.x.x.inc
 # creating this file
-SUMMARY = "BootMCU execute Zephyr OS with aspeed-irot firmware"
-PACKAGE_ARCH = "${MACHINE_ARCH}"
-
-PROVIDES += "virtual/bootmcu"
 
 SRCREV_mbedtls = "fb36f3fe20f9f62e67b1a20c0cfe0a6788ec2bf6"
 SRCREV_cmsis = "4b96cbb174678dcd3ca86e11e1f24bc5f8726da0"
