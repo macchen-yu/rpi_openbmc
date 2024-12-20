@@ -1,5 +1,5 @@
 require recipes-kernel/zephyr-kernel/zephyr-image.inc
-require zephyr-aspeed-irot-src.inc
+require zephyr-aspeed-src.inc
 
 PV = "1.0+git"
 
@@ -7,8 +7,8 @@ PV = "1.0+git"
 SRCREV_zephyr = "${AUTOREV}"
 ZEPHYR_BRANCH = "aspeed-dev-v3.7.0"
 
-# aspeed-irot
-SRCREV_aspeed-irot = "${AUTOREV}"
+# bootmcu
+SRCREV_bootmcu = "${AUTOREV}"
 ASPEED_ZEPHYR_PROJECT_BRANCH = "aspeed-irot"
 
 # mcuboot

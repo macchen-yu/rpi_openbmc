@@ -58,4 +58,4 @@ ZEPHYR_TOOLCHAIN_VARIANT = "zephyr"
 
 # bootmcu
 PREFERRED_PROVIDER_virtual/bootmcu:ast2700-a0 ?= "bootmcu-spl"
-PREFERRED_PROVIDER_virtual/bootmcu ?= "zephyr-aspeed-irot"
+PREFERRED_PROVIDER_virtual/bootmcu ?= "zephyr-aspeed-bootmcu"

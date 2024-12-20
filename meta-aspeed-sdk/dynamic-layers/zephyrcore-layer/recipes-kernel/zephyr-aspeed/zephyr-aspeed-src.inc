@@ -16,7 +16,7 @@ SRC_URI_ZEPHYR_CMSIS = "git://github.com/zephyrproject-rtos/cmsis;protocol=https
 
 SRC_URI = "\
     ${SRC_URI_ZEPHYR};name=zephyr;branch=${ZEPHYR_BRANCH};destsuffix=git/zephyr \
-    ${SRC_URI_ASPEED_ZEPHYR_PROJECT};name=aspeed-irot;branch=${ASPEED_ZEPHYR_PROJECT_BRANCH};destsuffix=git/aspeed-zephyr-project \
+    ${SRC_URI_ASPEED_ZEPHYR_PROJECT};name=bootmcu;branch=${ASPEED_ZEPHYR_PROJECT_BRANCH};destsuffix=git/aspeed-zephyr-project \
     ${SRC_URI_ZEPHYR_MCUBOOT};name=mcuboot;branch=${ZEPHYR_MCUBOOT_BRANCH};destsuffix=git/bootloader/mcuboot \
     ${SRC_URI_ZEPHYR_MBEDTLS};name=mbedtls;nobranch=1;destsuffix=git/modules/crypto/mbedtls \
     ${SRC_URI_ZEPHYR_CMSIS};name=cmsis;nobranch=1;destsuffix=git/modules/hal/cmsis \
