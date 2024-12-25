@@ -18,13 +18,13 @@ do_compile() {
     rm -rf ${S}/output
     install -d ${S}/output
 
-    oe_runmake PORT_DIR=linux LFLAGS_END="${LDFLAGS} -pthread" XCFLAGS="-DMULTITHREAD=1 -DUSE_FORK" link
+    oe_runmake PORT_DIR=linux "LFLAGS_END= -pthread" XCFLAGS="-DMULTITHREAD=1 -DUSE_FORK" link
     install -m 0755 coremark.exe ${S}/output/coremark_1thread
     oe_runmake clean
-    oe_runmake PORT_DIR=linux "LFLAGS_END=${LDFLAGS} -pthread" XCFLAGS="-DMULTITHREAD=2 -DUSE_FORK" link
+    oe_runmake PORT_DIR=linux "LFLAGS_END= -pthread" XCFLAGS="-DMULTITHREAD=2 -DUSE_FORK" link
     install -m 0755 coremark.exe ${S}/output/coremark_2thread
     oe_runmake clean
-    oe_runmake PORT_DIR=linux "LFLAGS_END=${LDFLAGS} -pthread" XCFLAGS="-DMULTITHREAD=4 -DUSE_FORK" link
+    oe_runmake PORT_DIR=linux "LFLAGS_END= -pthread" XCFLAGS="-DMULTITHREAD=4 -DUSE_FORK" link
     install -m 0755 coremark.exe ${S}/output/coremark_4thread
 }
 
@@ -33,3 +33,6 @@ do_install() {
     install -m 0755 ${S}/output/* ${D}/${bindir}
 }
 
+# Add INSANE_SKIP = "ldflags" to avoid QA issue in do_package_qa.
+# QA Issue: File /usr/bin/coremark_4thread in package coremark doesn't have GNU_HASH (didn't pass LDFLAGS?)
+INSANE_SKIP:${PN} = "ldflags"
