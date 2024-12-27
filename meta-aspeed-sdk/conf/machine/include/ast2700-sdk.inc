@@ -57,7 +57,7 @@ UBOOT_FIT_TSP_IMAGE ?= "${DEPLOY_DIR_IMAGE}/ast2700-tsp.bin"
 ZEPHYR_TOOLCHAIN_VARIANT = "zephyr"
 
 # bootmcu
-PREFERRED_PROVIDER_virtual/bootmcu:ast2700-a0 ?= "bootmcu-spl"
-# Currently, only support pre-built image
-PREFERRED_PROVIDER_virtual/bootmcu ?= "zephyr-aspeed-bootmcu-prebuilt"
+PREFERRED_PROVIDER_virtual/bootmcu ?= "bootmcu-spl"
+# Do not support zephyr
+#PREFERRED_PROVIDER_virtual/bootmcu ?= "zephyr-aspeed-bootmcu-prebuilt"
 #PREFERRED_PROVIDER_virtual/bootmcu ?= "zephyr-aspeed-bootmcu"
