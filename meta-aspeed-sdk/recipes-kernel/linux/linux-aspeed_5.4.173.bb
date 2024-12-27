@@ -1,7 +1,7 @@
 KBRANCH = "aspeed-master-v5.4"
 LINUX_VERSION ?= "5.4.173"
 
-# Tag for v00.04.19
+# Tag for v00.04.20
 SRCREV = "2f214b2be642e8beb411f7844a95b964bddcbf6d"
 
 require linux-aspeed.inc

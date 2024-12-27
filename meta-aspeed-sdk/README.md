@@ -1,7 +1,7 @@
 # Create build environment
 ## Prerequisite
 
-### Ubuntu 20.04
+### Ubuntu 22.04
 ```
 sudo apt install gawk wget git diffstat unzip texinfo gcc build-essential chrpath socat cpio python3 python3-pip python3-pexpect xz-utils \
     debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev python3-subunit mesa-common-dev zstd liblz4-tool file locales
@@ -49,13 +49,17 @@ ast2600-emmc-tee
 ast2600-emmc-tee-515
 ast2700-default
 ast2700-default-ncsi
-ast2700-default-ast1700-evb
-ast2700-default-ast1700-evb-cdr
 ast2700-emmc
+ast2700-ufs
 ast2700-abr
 ast2700-dcscm
 ast2700-dcscm-ast1700-evb
-ast2700-dcscm-ast1700-demo
+ast2700-a0-default
+ast2700-a0-default-ncsi
+ast2700-a0-emmc
+ast2700-a0-abr
+ast2700-a0-dcscm
+ast2700-a0-dcscm-ast1700-demo
 ```
 
 - Linux kernel version is `6.6` by default. machine with `515` postfix for kernel v5.15, machine with `54` postfix for kernel v5.4.

@@ -14,6 +14,12 @@ OTPTOOL_USER_DIR ?= "${STAGING_DATADIR_NATIVE}/aspeed-secure-config/ast2600/data
 # By default, algorithm is "Mode 2 RSA4096_SHA512"
 #
 
+# Using "--no_last_bit" if users still need to add or update OEM DSS
+# public keys. Please add "ecc_region": false in OTP CONFIG to disable
+# ECC. Once users have done all OTP programming, then enable region ECC.
+#
+#OTPTOOL_EXTRA_OPTS ?= " --no_last_bit "
+
 # RSA2048_SHA256
 #OTPTOOL_CONFIGS ?= "${STAGING_DATADIR_NATIVE}/aspeed-secure-config/ast2600/otp/evbA3_RSA2048_SHA256.json"
 #SOCSEC_SIGN_EXTRA_OPTS ?= " \

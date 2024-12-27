@@ -22,8 +22,10 @@ RECOVERY_OUTPUT_IMAGE ?=  "recovery_${SPL_IMAGE}"
 OUTPUT_IMAGE_DIR ?= "${S}/output"
 SOURCE_IMAGE_DIR ?= "${S}/source"
 
+IS_AST2700_A0 ?= "${@bb.utils.contains('MACHINE_FEATURES', 'ast2700-a0', 'yes', 'no', d)}" 
+
 do_deploy () {
-    if [ "${SOC_FAMILY}" = "aspeed-g7" ]; then
+    if [ "${IS_AST2700_A0}" = "yes" ]; then
         if [ -z ${BOOTMCU_FW_BINARY} ]; then
             bbfatal "Boot from UART mode only support BootMCU SPL"
         fi

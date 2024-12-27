@@ -1,8 +1,8 @@
 FILESEXTRAPATHS:append := ":${THISDIR}/${PN}"
 
 # Declare port spcific config files
-OBMC_CONSOLE_TTYS = "ttyS2"
-CONSOLE_CLIENT = "2200"
+OBMC_CONSOLE_TTYS = "ttyS2 ttyS7"
+CONSOLE_CLIENT = "2200 2201"
 
 CONSOLE_SERVER_CONF_FMT = "file://server.{0}.conf"
 CONSOLE_CLIENT_CONF_FMT = "file://client.{0}.conf"

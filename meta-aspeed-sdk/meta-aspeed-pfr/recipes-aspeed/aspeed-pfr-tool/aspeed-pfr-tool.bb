@@ -12,6 +12,7 @@ SRC_URI = " file://include/provision.h;subdir=${S} \
             file://include/mailbox_enums.h;subdir=${S} \
             file://include/arguments.h;subdir=${S} \
             file://include/config.h;subdir=${S} \
+            file://include/utils.h;subdir=${S} \
             file://provision.c;subdir=${S} \
             file://checkpoint.c;subdir=${S} \
             file://i2c_utils.c;subdir=${S} \
@@ -19,6 +20,7 @@ SRC_URI = " file://include/provision.h;subdir=${S} \
             file://info.c;subdir=${S} \
             file://spdm.c;subdir=${S} \
             file://main.c;subdir=${S} \
+            file://utils.c;subdir=${S} \
             file://meson.build;subdir=${S} \
             file://meson_options.txt;subdir=${S} \
             file://aspeed-pfr-tool.conf.in;subdir=${S} \
@@ -29,10 +31,19 @@ DEPENDS = "openssl i2c-tools"
 RDEPENDS:${PN} = "openssl i2c-tools"
 
 do_install:append() {
+    install -d ${D}/${datadir}/pfrconfig
     install -m 0644 ${S}/aspeed-pfr-tool-egs.conf ${D}/${datadir}/pfrconfig/
 }
 
 FILES:${PN}:append = " ${datadir}/pfrconfig"
+
+PACKAGECONFIG ??= ""
+
+PACKAGECONFIG:append:intel-pfr = " attestation pfr-5-0-secure-conn"
+
+PACKAGECONFIG[attestation] = "-Dattestation=enabled, -Dattestation=disabled,, spdm-emu"
+PACKAGECONFIG[pfr-5-0-secure-conn] = "-Dsecure_connection=enabled, -Dsecure_connection=disabled, spdm-emu"
+PACKAGECONFIG[pfr-5-0-secure-test-case] = "-Dsecure_test_case=enabled, -Dsecure_test_case=disabled, spdm-emu"
 
 # Workaround
 do_collect_spdx_deps[nostamp] = "1"
