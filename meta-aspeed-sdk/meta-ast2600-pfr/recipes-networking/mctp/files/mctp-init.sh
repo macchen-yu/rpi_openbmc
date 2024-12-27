@@ -18,12 +18,12 @@ mctp neigh add 0x0b dev mctpi2c13 lladdr 0x70
 
 if mctp link|grep mctpi3c0 > /dev/null;then
 	mctp address add 0x9d dev mctpi3c0
-	mctp link set mctpi3c0 net 3 up mtu 238
+	mctp link set mctpi3c0 net 3 up mtu 68
 fi
 
 if mctp link|grep mctpi3c1 > /dev/null;then
-        mctp address add 0x1d dev mctpi3c1
-        mctp link set mctpi3c1 net 4 up mtu 238
+	mctp address add 0x1d dev mctpi3c1
+	mctp link set mctpi3c1 net 4 up mtu 68
 fi
 
 touch /tmp/.mctp_init_done

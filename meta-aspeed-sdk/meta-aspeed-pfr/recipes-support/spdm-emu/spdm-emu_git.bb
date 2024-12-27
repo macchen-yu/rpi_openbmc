@@ -12,6 +12,8 @@ SRC_URI = " \
         file://0002-Enabling-MCTP-over-Kernel-Socket.patch \
         file://0003-Support-both-libmctp-and-socket-based-mctp.patch \
         file://0004-to-add-PEC-support.patch \
+        file://0005-Support-secure-connection-in-NONE-mode.patch \
+        file://0006-libspdm-Support-secure-connection-in-NONE-mode.patch;patchdir=libspdm \
         file://i2c-attestation-emu.service \
         file://i3c-attestation-emu.service \
         file://ecp384 \
@@ -32,7 +34,20 @@ SYSTEMD_SERVICE:${PN} = "i2c-attestation-emu.service i3c-attestation-emu.service
 
 FILES:${PN}:append = " ${datadir}/spdm-emu"
 
+EXTRA_FOLDERS = " \
+	${B}/spdm_emu/spdm_requester_emu \
+	${B}/library \
+	"
+
 do_install:append () {
+	O_FILES=`find ${B}/out/ -name "*.o" |grep -v 'debuglib_null.out'`
+	for i in ${EXTRA_FOLDERS};do
+		TMP_FILES=`find ${i} -name "*.o"|grep -v 'spdm_requester_emu.c.o'`
+		O_FILES="${O_FILES} ${TMP_FILES}"
+	done
+	${BUILD_AR} scr libspdm.a $O_FILES
+	install -m 0644 ${B}/libspdm.a ${D}/usr/lib/
+
 	install -d ${D}${systemd_system_unitdir}
 	install -m 0644 ${WORKDIR}/i2c-attestation-emu.service ${D}${systemd_system_unitdir}/
 	install -m 0644 ${WORKDIR}/i3c-attestation-emu.service ${D}${systemd_system_unitdir}/

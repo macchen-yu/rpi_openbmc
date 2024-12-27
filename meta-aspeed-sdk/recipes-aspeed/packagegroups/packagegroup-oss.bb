@@ -16,12 +16,6 @@ PACKAGES = " \
     ${PN}-extra \
     "
 
-# To generate the IPKs, build the following packages by default
-# but do not install them.
-DEPENDS = " \
-    python3-drgn \
-    "
-
 # The size of fio is very large because its dependencies includes python3-core.
 # The size of fio and python3-core are 10MB.
 # A nvme-cli recipe creates post installation script.
@@ -31,7 +25,8 @@ DEPENDS = " \
 # https://github.com/AspeedTech-BMC/openbmc/blob/aspeed-master/meta-openembedded/meta-oe/recipes-bsp/nvme-cli/nvme-cli_2.6.bb
 SUMMARY:${PN}-apps = "Open Source Applications"
 RDEPENDS:${PN}-apps = " \
-    mdio-tool \
+    pievo-mdio-tool \
+    mdio-tools \
     gperf \
     iperf3 \
     pciutils \
@@ -77,6 +72,7 @@ RDEPENDS:${PN}-intel-pmci = " \
 
 # Only install in AST26xx and AST27xx series rofs as the free space of AST25xx rofs is not enough.
 RDEPENDS:${PN}-apps:remove:aspeed-g5 = " \
+    mdio-tools \
     i3c-tools \
     iozone3 \
     hdparm \

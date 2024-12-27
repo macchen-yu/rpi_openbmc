@@ -1,6 +1,5 @@
-PFR_IMAGE_MODE = "${@bb.utils.contains('MACHINE_FEATURES', 'cerberus-pfr', 'cerberus-pfr-signing-image', 'intel-pfr-signing-image', d)}"
+PFR_IMAGE_MODE = "${@bb.utils.contains('MACHINE_FEATURES', 'intel-pfr', 'intel-pfr-signing-image', 'cerberus-pfr-signing-image', d)}"
 inherit ${PFR_IMAGE_MODE}
-
 
 # Generate PFR image for provisioned Redfish firmware update.
 do_generate_static:append() {

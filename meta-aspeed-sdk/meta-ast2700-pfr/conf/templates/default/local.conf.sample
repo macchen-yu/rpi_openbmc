@@ -1,6 +1,8 @@
 MACHINE ??= "ast2700-dcscm"
 #MACHINE ??= "ast2700-dcscm-ast1700-evb"
 #MACHINE ??= "ast2700-dcscm-ast1700-demo"
+#MACHINE ??= "ast2700-a0-dcscm"
+#MACHINE ??= "ast2700-a0-dcscm-ast1700-demo"
 
 DISTRO ?= "openbmc-phosphor"
 PACKAGE_CLASSES ?= "package_ipk"
@@ -26,10 +28,4 @@ EXTRA_USERS_PARAMS = " \
 # Change time zone to local time from UTC for applying localtime
 # in kernel build time.
 TZ = '/etc/localtime'
-
-# Free Open Source Software (FOSS) Creation
-# INHERIT += "archiver"
-# ARCHIVER_MODE[src] = "original"
-# ARCHIVER_MODE[recipe] = "1"
-# COPYLEFT_LICENSE_INCLUDE = "*"
 
