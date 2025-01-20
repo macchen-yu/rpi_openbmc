@@ -19,8 +19,8 @@ SRC_URI:append:class-nativesdk = " \
            file://environment.d-openssl.sh \
            "
 PV = "3.2.0+git"
-# Tag for v00.02.01
-SRCREV = "c6c0c5fb26f3e5694973e7fb965b28726f8f4b08"
+# Tag for v00.02.02
+SRCREV = "2c92a0672e46f65a92a49e9a8cb5d71ce05fdf3c"
 
 inherit lib_package multilib_header multilib_script ptest perlnative manpages
 MULTILIB_SCRIPTS = "${PN}-bin:${bindir}/c_rehash"
