@@ -7,7 +7,9 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=522c9891674011c4a2390d828772384d"
 
 BRANCH="master"
 SRC_URI = "git://github.com/AspeedTech-BMC/fmc_imgtool.git;protocol=ssh;branch=${BRANCH}"
-SRCREV = "dfaef03d724c4464f9b104cd91074f7ea44d4dd1"
+
+# Tag for v00.01.00
+SRCREV = "39ddc55123f8e3166a4941e2c679d67df2602bf6"
 
 PV = "1.0+git"
 

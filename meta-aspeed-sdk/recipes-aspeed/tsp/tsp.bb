@@ -8,8 +8,13 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 PR = "r0"
 
 TSP_FIRMWARE ?= "ast2700-tsp.bin"
+TSP_FIRMWARE_ELF ?= "ast2700-tsp.elf"
 
-SRC_URI = "file://${TSP_FIRMWARE};subdir=${S}"
+TSP_FIRMWARE_EXTRA ?= "${@'file://${TSP_FIRMWARE_ELF};subdir=${S}' if len('${TSP_FIRMWARE_ELF}') else ''}"
+
+SRC_URI = "file://${TSP_FIRMWARE};subdir=${S} \
+           ${TSP_FIRMWARE_EXTRA} \
+          "
 
 do_patch[noexec] = "1"
 do_configure[noexec] = "1"
@@ -20,6 +25,9 @@ inherit deploy
 do_deploy () {
     install -d ${DEPLOYDIR}
     install -m 644 ${S}/${TSP_FIRMWARE} ${DEPLOYDIR}/.
+    if [ -f ${S}/${TSP_FIRMWARE_ELF} ]; then
+        install -m 644 ${S}/${TSP_FIRMWARE_ELF} ${DEPLOYDIR}/.
+    fi
 }
 
 addtask deploy before do_build after do_compile
