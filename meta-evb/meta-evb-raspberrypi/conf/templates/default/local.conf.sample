@@ -22,7 +22,7 @@ CONF_VERSION = "2"
 require conf/machine/include/obmc-bsp-common.inc
 require conf/machine/include/obmc-evb-common.inc
 
-
+LICENSE_FLAGS_ACCEPTED += "synaptics-killswitch"
 ############
 IMAGE_FSTYPES = "ext4.xz rpi-sdimg"
 SDIMG_ROOTFS_TYPE="ext4.xz"
